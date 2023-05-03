@@ -1,19 +1,31 @@
 import 'package:flutter/material.dart';
 import 'circular_progress_widget.dart';
 import 'screen2.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
+void main() {
+  runApp(MyApp());
+  getData().then((data) {
+    products = data;
+  });
+}
 
-void main() => runApp(MyApp());
+List<Map<String, dynamic>> products = [];
 
-final List<Map<String, dynamic>> products = [
-  {'name': 'Яйца', 'calories': '100', 'count': 100},
-  {'name': 'Каша манная', 'calories': '100', 'count': 100},
-  {'name': 'Бутерброды', 'calories': '100', 'count': 100},
-  {'name': 'Хлопья', 'calories': '100', 'count': 100},
-  {'name': 'Творог', 'calories': '100', 'count': 100},
-];
+Future<List<Map<String, dynamic>>> getData() async {
+  var url = Uri.parse('https://nikita.backend23.2tapp.cc/sport/api/products');
+  var response = await http.get(url);
 
-final List<String> cardTitles = [  'Вода',  'Завтрак',  'Обед',  'Ужин',  'Перекусы',];
+  if (response.statusCode == 200) {
+    var jsonResponse = jsonDecode(response.body);
+    return jsonResponse.values.toList();
+  } else {
+    throw Exception('Failed to load data');
+  }
+}
+
+final List<String> cardTitles = ['Вода', 'Завтрак', 'Обед', 'Ужин', 'Перекусы'];
 
 class MyApp extends StatelessWidget {
   MyApp({Key? key}) : super(key: key);
@@ -37,6 +49,7 @@ class MyApp extends StatelessWidget {
     return items.map((item) => {'name': item}).toList();
   }
 }
+
 class HomePage extends StatelessWidget {
   int eaten = 0;
   int left = 0;

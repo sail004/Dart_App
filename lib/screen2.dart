@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'main.dart';
 
 class BreakfastScreen extends StatefulWidget {
   final List<Map<String, dynamic>> items;
@@ -56,13 +57,18 @@ class _BreakfastScreenState extends State<BreakfastScreen> {
                           '${_selectedItems[index]['calories']} ккал',
                           style: TextStyle(fontSize: 12),
                         ),
-                        IconButton(
-                          onPressed: () {
+                        GestureDetector(
+                          onTap: () {
                             setState(() {
                               _selectedItems[index]['count'] += (_selectedItems[index]['count'] ?? 0);
                             });
+
+                            Navigator.pushReplacementNamed(context, '/');
                           },
-                          icon: Icon(Icons.add_circle_outline),
+                          child: IconButton(
+                            icon: Icon(Icons.add_circle_outline),
+                            onPressed: null,
+                          ),
                         ),
                       ],
                     ),
